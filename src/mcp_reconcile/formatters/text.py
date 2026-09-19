@@ -1,7 +1,7 @@
 """Human-readable text formatter for drift output."""
 from __future__ import annotations
 
-from .models import Drift, DriftType, ScanResult
+from ..models import Drift, DriftType, ScanResult
 
 
 def format_scan_result(result: ScanResult) -> str:

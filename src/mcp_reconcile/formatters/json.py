@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import json
 
-from .models import ScanResult
+from ..models import ScanResult
 
 
 def format_scan_result(result: ScanResult) -> str:

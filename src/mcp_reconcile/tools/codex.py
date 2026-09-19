@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 from typing import Optional
 
-from .models import MCPServer, ToolName
+from ..models import MCPServer, ToolName
 
 CODEX_HOME = Path.home() / ".codex" / "config.toml"
 

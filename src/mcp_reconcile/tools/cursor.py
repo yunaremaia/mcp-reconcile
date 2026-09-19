@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from typing import Optional
 
-from .models import MCPServer, ToolName
+from ..models import MCPServer, ToolName
 
 CURSOR_HOME = Path.home() / ".cursor" / "mcp.json"
 CURSOR_PROJECT = Path.cwd() / ".cursor" / "mcp.json"

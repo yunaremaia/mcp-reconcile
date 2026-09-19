@@ -22,7 +22,7 @@ class TestMCPServerModel:
             command="npx",
             args=("-y", "@modelcontextprotocol/server-github@v1.2.0"),
         )
-        assert server.version == "1.2.0"
+        assert server.version == "v1.2.0"
     
     def test_version_extraction_without_version(self):
         server = MCPServer(
@@ -76,7 +76,7 @@ class TestClaudeParser:
         github = [s for s in servers if s.name == "github"][0]
         assert github.command == "npx"
         assert github.tool == ToolName.CLAUDE
-        assert github.version == "1.2.0"
+        assert github.version == "v1.2.0"
         
         filesystem = [s for s in servers if s.name == "filesystem"][0]
         assert filesystem.env == (("DEBUG", "true"),)
@@ -100,7 +100,7 @@ class TestCursorParser:
         servers = parse_cursor_json(path)
         assert len(servers) == 1
         assert servers[0].tool == ToolName.CURSOR
-        assert servers[0].version == "1.1.0"
+        assert servers[0].version == "v1.1.0"
 
 
 class TestCodexParser:
@@ -119,7 +119,7 @@ args = ["-y", "@modelcontextprotocol/server-github@v1.0.0"]
         assert len(servers) == 1
         assert servers[0].name == "github"
         assert servers[0].tool == ToolName.CODEX
-        assert servers[0].version == "1.0.0"
+        assert servers[0].version == "v1.0.0"
 
 
 class TestDriftDetection:

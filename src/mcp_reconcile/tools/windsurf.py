@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from typing import Optional
 
-from .models import MCPServer, ToolName
+from ..models import MCPServer, ToolName
 
 WINDSURF_HOME = Path.home() / ".codeium" / "windsurf" / "mcp_config.json"
 

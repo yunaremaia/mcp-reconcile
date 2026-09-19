@@ -47,7 +47,7 @@ class MCPServer:
         """Extract version from args (e.g., '@foo/bar@v1.2.3' -> 'v1.2.3')."""
         for arg in self.args:
             if "@v" in arg:
-                return arg.split("@v")[-1]
+                return "v" + arg.split("@v")[-1]
         return None
     
     def to_dict(self) -> dict[str, Any]:

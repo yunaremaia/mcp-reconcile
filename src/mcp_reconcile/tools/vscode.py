@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from typing import Optional
 
-from .models import MCPServer, ToolName
+from ..models import MCPServer, ToolName
 
 VSCODE_SETTINGS = Path.cwd() / ".vscode" / "settings.json"
 
