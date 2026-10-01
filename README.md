@@ -63,7 +63,7 @@ Added filesystem server to Cursor and Codex
 ## Installation
 
 ```bash
-pip install mcp-reconcile
+pip install git+https://github.com/yunaremaia/mcp-reconcile.git
 ```
 
 Or from source:
