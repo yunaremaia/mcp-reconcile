@@ -35,13 +35,13 @@ class MCPServer:
     env: tuple[tuple[str, str], ...] = ()
     tool: ToolName = ToolName.CLAUDE
     source: str = ""  # config file path
-    
+
     @property
     def full_command(self) -> str:
         """Return the full command string."""
         parts = [self.command] + list(self.args)
         return " ".join(parts)
-    
+
     @property
     def version(self) -> Optional[str]:
         """Extract version from args (e.g., '@foo/bar@v1.2.3' -> 'v1.2.3')."""
@@ -49,7 +49,7 @@ class MCPServer:
             if "@v" in arg:
                 return "v" + arg.split("@v")[-1]
         return None
-    
+
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -70,7 +70,7 @@ class Drift:
     description: str
     canonical: Optional[MCPServer] = None  # The "correct" version
     drifts: list[MCPServer] = field(default_factory=list)  # Servers with drift
-    
+
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -88,21 +88,21 @@ class ScanResult:
     servers: list[MCPServer] = field(default_factory=list)
     drifts: list[Drift] = field(default_factory=list)
     errors: list[str] = field(default_factory=list)
-    
+
     @property
     def has_drift(self) -> bool:
         return len(self.drifts) > 0
-    
+
     @property
     def server_count(self) -> int:
         return len(self.servers)
-    
+
     @property
     def tool_count(self) -> int:
         return len({s.tool for s in self.servers})
-    
+
     def by_tool(self, tool: ToolName) -> list[MCPServer]:
         return [s for s in self.servers if s.tool == tool]
-    
+
     def by_name(self, name: str) -> list[MCPServer]:
         return [s for s in self.servers if s.name == name]

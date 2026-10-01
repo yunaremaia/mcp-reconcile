@@ -4,14 +4,14 @@ from __future__ import annotations
 from typing import Optional
 
 from .models import Drift, DriftType, MCPServer, ScanResult, ToolName
-from .scanner import get_servers_by_name, get_servers_by_tool
+from .scanner import get_servers_by_name
 
 
 def detect_drift(result: ScanResult) -> list[Drift]:
     """Detect all drift in a scan result."""
     drifts: list[Drift] = []
     grouped = get_servers_by_name(result)
-    
+
     for name, servers in grouped.items():
         # Orphan: only one server of this name
         if len(servers) == 1:
@@ -26,10 +26,10 @@ def detect_drift(result: ScanResult) -> list[Drift]:
                     drifts=[server],
                 ))
             continue
-        
+
         # Multiple servers with same name - check for drift
         canonical = _find_canonical(servers)
-        
+
         # Check version drift
         versions = {s.version for s in servers if s.version is not None}
         if len(versions) > 1:
@@ -40,7 +40,7 @@ def detect_drift(result: ScanResult) -> list[Drift]:
                 canonical=canonical,
                 drifts=[s for s in servers if s != canonical],
             ))
-        
+
         # Check args drift
         args_sets = {s.args for s in servers}
         if len(args_sets) > 1:
@@ -51,7 +51,7 @@ def detect_drift(result: ScanResult) -> list[Drift]:
                 canonical=canonical,
                 drifts=[s for s in servers if s.args != canonical.args] if canonical else servers,
             ))
-        
+
         # Check command drift
         commands = {s.command for s in servers}
         if len(commands) > 1:
@@ -62,7 +62,7 @@ def detect_drift(result: ScanResult) -> list[Drift]:
                 canonical=canonical,
                 drifts=[s for s in servers if s.command != canonical.command] if canonical else servers,
             ))
-        
+
         # Check env drift
         env_sets = {s.env for s in servers}
         if len(env_sets) > 1:
@@ -73,13 +73,13 @@ def detect_drift(result: ScanResult) -> list[Drift]:
                 canonical=canonical,
                 drifts=[s for s in servers if s.env != canonical.env] if canonical else servers,
             ))
-    
+
     return drifts
 
 
 def _find_canonical(servers: list[MCPServer]) -> Optional[MCPServer]:
     """Find the canonical (preferred) server configuration.
-    
+
     Priority: Claude Code > Cursor > Copilot > Codex > Windsurf > VS Code
     """
     priority = [
@@ -90,19 +90,19 @@ def _find_canonical(servers: list[MCPServer]) -> Optional[MCPServer]:
         ToolName.WINDSURF,
         ToolName.VSCODE,
     ]
-    
+
     for tool in priority:
         for server in servers:
             if server.tool == tool:
                 return server
-    
+
     return servers[0] if servers else None
 
 
 def generate_fix_plan(drifts: list[Drift]) -> list[dict]:
     """Generate a list of fix operations from detected drifts."""
     operations = []
-    
+
     for drift in drifts:
         if drift.drift_type == DriftType.VERSION and drift.canonical:
             for server in drift.drifts:
@@ -114,7 +114,7 @@ def generate_fix_plan(drifts: list[Drift]) -> list[dict]:
                     "to": drift.canonical.version,
                     "source": server.source,
                 })
-        
+
         elif drift.drift_type == DriftType.MISSING and drift.canonical:
             # Find which tools don't have this server
             for server in drift.drifts:
@@ -125,7 +125,7 @@ def generate_fix_plan(drifts: list[Drift]) -> list[dict]:
                     "from_tool": drift.canonical.tool.value,
                     "source": server.source,
                 })
-        
+
         elif drift.drift_type == DriftType.ORPHAN and drift.canonical:
             # Orphan = only in one tool, copy to all others
             operations.append({
@@ -134,7 +134,7 @@ def generate_fix_plan(drifts: list[Drift]) -> list[dict]:
                 "from_tool": drift.canonical.tool.value,
                 "source": drift.canonical.source,
             })
-        
+
         elif drift.drift_type in (DriftType.ARGS, DriftType.COMMAND, DriftType.ENV) and drift.canonical:
             for server in drift.drifts:
                 operations.append({
@@ -145,5 +145,5 @@ def generate_fix_plan(drifts: list[Drift]) -> list[dict]:
                     "to": drift.canonical.full_command,
                     "source": server.source,
                 })
-    
+
     return operations
