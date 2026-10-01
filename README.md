@@ -1,5 +1,10 @@
 # MCP Reconcile
 
+![CI](https://github.com/yunaremaia/mcp-reconcile/actions/workflows/ci.yml/badge.svg)
+![Python](https://img.shields.io/badge/python-3.9-blue.svg)
+![License](https://img.shields.io/github/license/yunaremaia/mcp-reconcile)
+
+
 **Cross-tool MCP configuration drift detection and reconcile.**
 
 You use Claude Code, Cursor, Copilot, Codex, and Windsurf. Each has its own MCP config format and location. When you add a server in one, it doesn't appear in others. When you update a version or arg in one, others remain stale. `mcp-reconcile` detects that drift — and can fix it.
@@ -141,6 +146,19 @@ mcp-reconcile/
 ├── pyproject.toml
 └── README.md
 ```
+
+
+If this tool is useful to you, a star helps other people find it.
+
+## Related tools
+
+- **[mcp-guard](https://github.com/yunaremaia/mcp-guard)** — audit MCP servers for unsafe permissions
+- **[context-bridge](https://github.com/yunaremaia/context-bridge)** — persistent session memory for AI agents
+- **[tool-call-retry](https://github.com/yunaremaia/tool-call-retry)** — retry failed tool calls with backoff
+- **[agent-guard](https://github.com/yunaremaia/agent-guard)** — enforce guardrails on AI agent tool calls
+
+Part of a family of focused, single-purpose developer tools — each one does one thing
+and does it well.
 
 ## License
 
